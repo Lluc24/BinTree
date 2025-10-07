@@ -1,8 +1,10 @@
 import scala.math.max
 
-sealed trait BinTree[+A]
-case object Empty extends BinTree[Nothing]
-case class Node[A](value: A, left: BinTree[A], right: BinTree[A]) extends BinTree[A]
+enum BinTree[+T]:
+    case Node(value: T, left: BinTree[T], right: BinTree[T])
+    case Empty
+
+import BinTree.*
 
 def preorder[T](tree: BinTree[T]): List[T] =
     tree match
