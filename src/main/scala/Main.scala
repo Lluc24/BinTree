@@ -30,28 +30,25 @@ def basicTreeDemo(): Unit =
     println("-" * 40)
 
     // Create sample trees
-    val emptyTree: BinTree[Int] = Empty
-    val singleNode = Node(42, Empty, Empty)
-    val complexTree = Node(1,
-        Node(2, Node(4, Empty, Empty), Node(5, Empty, Empty)),
-        Node(3, Node(6, Empty, Empty), Node(7, Empty, Empty))
-    )
+    val emptyTree: BinTree = Empty
+    val singleNode = BinTree(42)
+    val complexTree = BinTree(1, 2, 3, 4, 5, 6, 7)
 
     println("Empty tree:")
-    println(s"  Elements: ${numElems(emptyTree)}")
+    println(s"  Elements: ${size(emptyTree).asInstanceOf[Int]}")
     println(s"  Depth: ${depth(emptyTree)}")
     println(s"  Preorder: ${preorder(emptyTree)}")
     println()
 
     println("Single node tree (value: 42):")
-    println(s"  Elements: ${numElems(singleNode)}")
+    println(s"  Elements: ${size(singleNode).asInstanceOf[Int]}")
     println(s"  Depth: ${depth(singleNode)}")
     println(s"  Preorder: ${preorder(singleNode)}")
     println()
 
     println("Complex tree:")
-    printTree(complexTree)
-    println(s"  Elements: ${numElems(complexTree)}")
+    println(complexTree)
+    println(s"  Elements: ${size(complexTree).asInstanceOf[Int]}")
     println(s"  Depth: ${depth(complexTree)}")
     println(s"  Preorder: ${preorder(complexTree)}")
     println()
@@ -69,12 +66,12 @@ def buildTreeDemo(): Unit =
 
     examples.foreach { (description, list) =>
         println(s"$description: ${list.mkString(", ")}")
-        val tree = buildTree(list)
+        val tree = BinTree(list*)
         println("Generated tree:")
-        printTree(tree)
+        println(tree)
         println(s"  Preorder traversal: ${preorder(tree)}")
         println(s"  Tree depth: ${depth(tree)}")
-        println(s"  Number of elements: ${numElems(tree)}")
+        println(s"  Number of elements: ${size(tree).asInstanceOf[Int]}")
         println()
     }
 
@@ -84,25 +81,25 @@ def differentTypesDemo(): Unit =
 
     // String tree
     val words = List("root", "left", "right", "deep", "leaf")
-    val stringTree = buildTree(words)
+    val stringTree = BinTree(words*)
     println("String tree from: " + words.mkString(", "))
-    printTree(stringTree)
+    println(stringTree)
     println(s"  Preorder: ${preorder(stringTree)}")
     println()
 
     // Character tree
     val chars = List('A', 'B', 'C', 'D', 'E')
-    val charTree = buildTree(chars)
+    val charTree = BinTree(chars*)
     println("Character tree from: " + chars.mkString(", "))
-    printTree(charTree)
+    println(charTree)
     println(s"  Preorder: ${preorder(charTree)}")
     println()
 
     // Negative numbers
     val negatives = List(-10, -5, 0, 5, 10)
-    val negTree = buildTree(negatives)
+    val negTree = BinTree(negatives*)
     println("Tree with negative numbers: " + negatives.mkString(", "))
-    printTree(negTree)
+    println(negTree)
     println(s"  Preorder: ${preorder(negTree)}")
     println()
 
@@ -124,10 +121,10 @@ def interactiveMode(): Unit =
         else
             parseAndProcessInput(input) match
                 case Some(numbers) if numbers.nonEmpty =>
-                    val tree = buildTree(numbers)
+                    val tree = BinTree(numbers*)
                     println()
                     println("🌳 Generated tree:")
-                    printTree(tree)
+                    println(tree)
                     println()
                     displayTreeStats(tree, numbers)
                     println()
@@ -144,15 +141,15 @@ def parseAndProcessInput(input: String): Option[List[Int]] =
         case Success(numbers) => Some(numbers)
         case Failure(_) => None
 
-def displayTreeStats[T](tree: BinTree[T], originalList: List[T]): Unit =
+def displayTreeStats[T](tree: BinTree, originalList: List[T]): Unit =
     println("📊 Tree Statistics:")
     println(s"  • Original input: ${originalList.mkString(", ")}")
     println(s"  • Preorder traversal: ${preorder(tree).mkString(", ")}")
-    println(s"  • Number of elements: ${numElems(tree)}")
+    println(s"  • Number of elements: ${size(tree).asInstanceOf[Int]}")
     println(s"  • Tree depth: ${depth(tree)}")
-    println(s"  • Is complete binary tree: ${isCompleteTree(tree, numElems(tree))}")
+    println(s"  • Is complete binary tree: ${isCompleteTree(tree, size(tree).asInstanceOf[Int])}")
 
-def isCompleteTree[T](tree: BinTree[T], totalNodes: Int): Boolean =
+def isCompleteTree(tree: BinTree, totalNodes: Int): Boolean =
     val expectedDepth = math.ceil(math.log(totalNodes + 1) / math.log(2)).toInt
     val actualDepth = depth(tree)
     actualDepth == expectedDepth
@@ -170,8 +167,8 @@ def demonstrateTreeProperties(): Unit =
     println("-" * 40)
 
     examples.foreach { (name, list) =>
-        val tree = buildTree(list)
-        val elements = numElems(tree)
+        val tree = BinTree(list*)
+        val elements = size(tree).asInstanceOf[Int]
         val treeDepth = depth(tree)
         val minDepth = math.ceil(math.log(elements + 1) / math.log(2)).toInt
 
